@@ -1,68 +1,46 @@
 #include "main.h"
 
-/**
- * main -
- * argv:
- * @c:
- *
- * Return: void
- *
- */
-
-int main(int c, char **argv)
+int _putchar(char c)
 {
-	(void)c;
-	char *prompt = "(Test Shell)>$ ", *token, *buffer, *cpy_buffr;
-	int i, num_tokens = 0;
-	size_t size = 0;
-	const char *delim = " \n";
+	return (write(1, &c, 1));
+}
+
+int _printstring(char *str)
+{
+	int i = 0,  count = 0;
+	while (str[i])
+	{
+		count += _putchar(str[i++]);
+	}
+	return (count);
+}
+
+int main(void)
+{
+	char *prompt =  "(Test_Shell)$ ", *buffer = NULL;
+	pid_t Child_ID;
+	size_t buffersize = 0;
 	ssize_t num_chars;
 
 	while (1)
 	{
 
-	printf("%s", prompt);
-	num_chars = getline(&buffer, &size, stdin);
+	_printstring(prompt);
+
+	num_chars = getline(&buffer, &buffersize, stdin);
+
 
 	if (num_chars == -1)
 	{
-		printf("Exiting Test_Shell>$ ....\n");
+		_printstring("Exiting shell ...");
 		return (-1);
 	}
 
-	cpy_buffr = malloc(sizeof(char) * num_chars);
-	if (cpy_buffr == NULL)
-	{
-		perror("Memory allocation failed\n");
-				return (-1);
+	Child_ID = fork();
+
+	_printstring(buffer);
+
 	}
-
-	strcpy(cpy_buffr, buffer);
-
-	token = strtok(NULL, delim);
-
-	while (token != NULL)
-	{
-		num_tokens++;
-		token = strtok(NULL, delim);
-	}
-	num_tokens++;
-
-	argv = malloc(sizeof(char *) * num_tokens);
-
-	token = strtok(cpy_buffr, delim);
-	for (i = 0; token != NULL, i++);
-	{
-		argv[i] = malloc(sizeof(char) * strlen(token));
-		strcpy(argv[i], token);
-		printf("%s\n", argv[i]);
-	}
-	
-	printf("%s\n", buffer);
-	}
-
-	free(cpy_buffr);
-	free(argv);
 	free(buffer);
 
 	return (0);
