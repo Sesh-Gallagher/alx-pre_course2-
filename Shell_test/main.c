@@ -2,17 +2,17 @@
 
 int _putchar(char c)
 {
-	return (write(1, &c, 1));
+        return (write(1, &c, 1));
 }
 
 int _printstring(char *str)
 {
-	int i = 0,  count = 0;
-	while (str[i])
-	{
-		count += _putchar(str[i++]);
-	}
-	return (count);
+        int i = 0,  count = 0;
+        while (str[i])
+        {
+                count += _putchar(str[i++]);
+        }
+        return (count);
 }
 
 int main(int c, char **env)
@@ -64,7 +64,8 @@ int main(int c, char **env)
 	}
 	else if (Child_ID == 0)
 	{
-	if (execve(arg[0], arg, env) == -1);
+	exe = execve(arg[0], arg, env);
+		if (exe == -1)
 		_printstring("Command not found\n");
 	}
 	else
