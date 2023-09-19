@@ -23,7 +23,7 @@ int main(int c, char **env)
 	size_t buffersize = 0;
 	int status, i, j;
 	ssize_t num_chars;
-	char *arg[10], *delim = "\n";
+	char *arg[10], *delim = " \n";
 
 	while (1)
 	{
