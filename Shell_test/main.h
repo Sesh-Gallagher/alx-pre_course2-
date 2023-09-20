@@ -7,6 +7,10 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-
+int _builtInCmd(char **arg);
+char *location(char *path, char *arg);
+int _printstring(char *str);
+int _putchar(char c);
+char *get_loc( char *arg);
 
 #endif

@@ -1,29 +1,23 @@
 #include "main.h"
 
-int _putchar(char c)
-{
-        return (write(1, &c, 1));
-}
-
-int _printstring(char *str)
-{
-        int i = 0,  count = 0;
-        while (str[i])
-        {
-                count += _putchar(str[i++]);
-        }
-        return (count);
-}
+/**
+ * main -
+ * @c:
+ * @env:
+ *
+ * Return: 
+ *
+ */
 
 int main(int c, char **env)
 {
-	char *prompt =  "(Test_Shell)$ ", *buffer = NULL;
+	char *prompt =  "(Test_Shell)$ ", *buffer = NULL, *path;
 	(void)c;
 	pid_t Child_ID;
 	size_t buffersize = 0;
-	int status, i, j;
+	int status, i, j, exe;
 	ssize_t num_chars;
-	char *arg[10], *delim = " \n";
+	char *arg[11], *delim = " \n";
 
 	while (1)
 	{
@@ -54,6 +48,20 @@ int main(int c, char **env)
 	{
 		arg[++j] = strtok(NULL, delim);		
 	}
+	arg[j] = NULL;
+
+	path = get_loc(arg[0]);
+
+	if (path == NULL)
+	{
+		if (_builtInCmd(arg) != 0)
+		{
+			continue;
+		}
+		else
+		_printstring("command not found\n");
+		continue;
+	}
 
 	Child_ID = fork();
 	if (Child_ID < 0)
@@ -64,7 +72,7 @@ int main(int c, char **env)
 	}
 	else if (Child_ID == 0)
 	{
-	exe = execve(arg[0], arg, env);
+	exe = execve(path, arg, env);
 		if (exe == -1)
 		_printstring("Command not found\n");
 	}
@@ -74,6 +82,7 @@ int main(int c, char **env)
 	/*_printstring(buffer);*/
 
 	}
+	free(path);
 	free(buffer);
 
 	return (0);
