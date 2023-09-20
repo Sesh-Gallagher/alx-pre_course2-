@@ -1,11 +1,11 @@
 #include "main.h"
 
 /**
- * main -
- * @c:
- * @env:
+ * main - program used to initiate shell
+ * @c: string input from client as stdin
+ * @env: enviroment
  *
- * Return: 
+ * Return: 0 on success.
  *
  */
 
@@ -31,7 +31,7 @@ int main(int c, char **env)
 	if (num_chars == -1)
 	{
 		free(buffer);
-		exit (0);
+		exit(0);
 	}
 
 	i = 0;
@@ -46,7 +46,7 @@ int main(int c, char **env)
 	arg[j] = strtok(buffer, delim);
 	while (arg[j])
 	{
-		arg[++j] = strtok(NULL, delim);		
+		arg[++j] = strtok(NULL, delim);
 	}
 	arg[j] = NULL;
 
@@ -68,7 +68,7 @@ int main(int c, char **env)
 	{
 		_printstring("Forking failed");
 		free(buffer);
-		exit (0);
+		exit(0);
 	}
 	else if (Child_ID == 0)
 	{

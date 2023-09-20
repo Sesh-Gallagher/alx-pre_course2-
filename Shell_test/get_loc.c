@@ -1,5 +1,16 @@
 #include "main.h"
 
+/*
+ * location - Function used to link path and command
+ * @path: path of command provided by stdinput
+ * @arg: argument vector
+ *
+ * Description: links path to commandinorder for shell
+ *to action command
+ *
+ * Return: NULL.
+ */
+
 char *location(char *path, char *arg)
 {
 	char *path_cpy, *pathToken, *filePath;
@@ -10,7 +21,7 @@ char *location(char *path, char *arg)
 	pathToken = strtok(path_cpy, delim);
 
 	filePath = malloc(strlen(arg) + strlen(pathToken) + 2);
-	while(pathToken != NULL)
+	while (pathToken != NULL)
 	{
 		strcpy(filePath, pathToken);
 		strcat(filePath, "/");
@@ -32,6 +43,17 @@ char *location(char *path, char *arg)
 		/*return (arg);*/
 	return (NULL);
 }
+
+/*
+ * get_loc - Function to get location and path of command
+ * input by client
+ * @arg: argument vector
+ *
+ * Description: function to match arg with command
+ * and get location
+ *
+ * Return: NULL.
+ */
 
 char *get_loc(char *arg)
 {
