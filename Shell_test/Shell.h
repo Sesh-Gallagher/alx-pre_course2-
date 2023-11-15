@@ -32,7 +32,7 @@ typedef struct builtin_t
 	char *name;
 	int (*func)(char **argv);
 
-} 
+}
 builtin_t;
 
 int prompt(size_t signum);
