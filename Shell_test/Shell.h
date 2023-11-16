@@ -45,10 +45,10 @@ int execute_command(char **argv);
 /**builtin function**/
 int (*handle_builtin_func(char *s))(char **argv);
 typedef int (*get_builtin)(char **argv);
-int modifyenv(char **argv);
+int modify_env(char **argv);
 int exit_simple_shell(char **argv);
-int printenv(char **argv UNUSED);
-int change_working_dir(char **argv);
+int print_env(char **argv UNUSED);
+int changeworking_dir(char **argv);
 /*--------------------------------------------*/
 
 void trim(char **str);

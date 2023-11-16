@@ -10,11 +10,11 @@ int (*handle_builtin_func(char *cmd))(char **argv)
 {
 	builtin_t builtins[] = {
 		{"exit", exit_simple_shell},
-		{"printenv", printenv},
-		{"env", printenv},
-		{"setenv", modifyenv},
-		{"unsetenv", modifyenv},
-		{"cd", change_working_dir},
+		{"printenv", print_env},
+		{"env", print_env},
+		{"setenv", modify_env},
+		{"unsetenv", modify_env},
+		{"cd", changeworking_dir},
 	};
 	int i = 0;
 

@@ -1,19 +1,51 @@
 #include "Shell.h"
 
+/** Names of functions used **/
+
+int print_env(char **argv);
+int changeworking_dir(char **argv);
+int exit_simple_shell(char **argv);
+int modify_env(char **argv);
+
+
 /**
- * change_working_dir - changes working directory
- * @argv: argument vector
+ * printenv - function that prints enviro variable.
+ * @argv: argument variable.
  *
- * Return: 0 on success
+ * Return: 0 if successful, -1 if failed.
  */
-int change_working_dir(char **argv)
+int print_env(char **argv)
 {
-	char *path, old_dir[PATH_MAX], new_dir[PATH_MAX];
+        int a = 0;
+
+        (void)argv;
+
+        while (environ[a] != NULL)
+        {
+                printf("%s\n", environ[a]);
+                a++;
+        }
+
+        return (0);
+}
+
+
+/**
+ * change_working_dir - c function that changes working directory
+ * @argv: argument variable.
+ *
+ * Return: 0 on success, -1 if failure.
+ */
+
+int changeworking_dir(char **argv)
+{
+	char *path;
+	char new_dir[PATH_MAX], old_dir[PATH_MAX];
 
 	if (argv[1] == NULL || _strcmp(argv[1], "~") == 0)
-		path = _getenv("HOME");
+		path = _getenv("Home");
 	else if (_strcmp(argv[1], "-") == 0)
-		path = _getenv("OLDPWD");
+		path = _getenv("oldpwd");
 	else
 		path = argv[1];
 
@@ -23,87 +55,43 @@ int change_working_dir(char **argv)
 			      "./hsh: 1: cd: can't cd to %s\n", path)
 		    : 0;
 
-	/*Get old pwd*/
+	/** Function to get old pathwd **/
 	if (getcwd(old_dir, sizeof(old_dir)) == NULL)
 		return (-1);
 
-	/*Change directory*/
+	/** Function to change directory**/
 	if (chdir(path) != 0)
 		return (-1);
 
-	/*Update old pwd*/
-	if (_setenv("OLDPWD", old_dir, 1) != 0)
+	/** Function update old pathwd **/
+	if (_setenv("oldpwd", old_dir, 1) != 0)
 		return (-1);
 
-	/*Get new pwd*/
+	/** Function to get new pathwd **/
 	if (getcwd(new_dir, sizeof(new_dir)) == NULL)
 		return (-1);
 
-	/*Update new pwd*/
-	if (_setenv("PWD", new_dir, 1) != 0)
+	/** Function to update new pathwd **/
+	if (_setenv("pwd", new_dir, 1) != 0)
 		return (-1);
 
 	return (0);
 }
 
 /**
- * printenv - prints environment variable
- * @argv: argument vector
+ * modifyenv - Function that modifies current environment using setenv or unsetenv.
+ * @argv: argument variable.
  *
- * Return: 0 if successful
- */
-int printenv(char **argv)
-{
-	int i = 0;
-
-	(void)argv;
-
-	while (environ[i] != NULL)
-	{
-		printf("%s\n", environ[i]);
-		i++;
-	}
-
-	return (0);
-}
-
-/**
- * exit_simple_shell - exit shell
- * @argv: argument vector
  *
- * Return: 0 on exit and status if exit code is given
+ * Return: 0 if successful, -1 if failed.
  */
-int exit_simple_shell(char **argv)
+
+int modify_env(char **argv)
 {
-	char *exit_code = argv[1];
-
-	if (!exit_code)
-	{
-		free_argv(argv);
-		exit(0);
-	}
-	else
-	{
-		int code = atoi(exit_code);
-
-		free_argv(argv);
-		exit(code);
-	}
-	return (0);
-}
-
-/**
- * modifyenv - modifies current environment using setenv or unsetenv
- * @argv: argument vector
- *
- * Return: 0 if successful
- */
-int modifyenv(char **argv)
-{
-	char *command = argv[0];
+	char *cmmnd = argv[0];
 	int result;
 
-	if (_strcmp(command, "setenv") == 0 &&
+	if (_strcmp(cmmnd, "setenv") == 0 &&
 	    (argv[1] != NULL) && (argv[2] != NULL))
 	{
 		char *name = argv[1];
@@ -114,7 +102,7 @@ int modifyenv(char **argv)
 		return (result);
 	}
 
-	if (_strcmp(command, "unsetenv") == 0 && (argv[1] != NULL))
+	if (_strcmp(cmmnd, "unsetenv") == 0 && (argv[1] != NULL))
 	{
 		char *name = argv[1];
 
@@ -125,4 +113,31 @@ int modifyenv(char **argv)
 
 	perror(": Environment not modified");
 	return (-1);
+}
+
+/**
+ * exit_simple_shell - a function that exits the shell when input is received
+ * @argv: argument vector variable
+ *
+ * Return: 0 on successful exit.
+ * and status if exit code is given
+ */
+
+int exit_simple_shell(char **argv)
+{
+        char *ext_cde = argv[1];
+
+        if (!ext_cde)
+        {
+                free_argv(argv);
+                exit(0);
+        }
+        else
+        {
+                int code = atoi(ext_cde);
+
+                free_argv(argv);
+                exit(code);
+        }
+        return (0);
 }
