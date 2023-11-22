@@ -9,20 +9,20 @@
 int (*handle_builtin_func(char *cmd))(char **argv)
 {
 	builtin_t builtins[] = {
-		{"exit", exit_simple_shell},
+		{"exit", exit_shell},
 		{"printenv", print_env},
 		{"env", print_env},
 		{"setenv", modify_env},
 		{"unsetenv", modify_env},
-		{"cd", changeworking_dir},
+		{"cd", change_dir},
 	};
-	int i = 0;
+	int a = 0;
 
-	while (i < (int)(sizeof(builtins) / sizeof(builtins[i])))
+	while (a < (int)(sizeof(builtins) / sizeof(builtins[a])))
 	{
-		if (_strcmp(cmd, builtins[i].name) == 0)
-			return (builtins[i].func);
-		i++;
+		if (_strcmp(cmd, builtins[a].name) == 0)
+			return (builtins[a].func);
+		a++;
 	}
 	return (NULL);
 }

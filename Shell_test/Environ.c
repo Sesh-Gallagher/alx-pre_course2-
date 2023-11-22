@@ -1,104 +1,95 @@
 #include "Shell.h"
 
 /**
- * create_new_env - adds a new environment variable
- * @name: name of variable
- * @value: value of variable
+ * createNew_env - Function that adds a new environment variable
+ * @value: The value of variable
+ * @name: Name of the variable to be used
  *
- * Return: 0 if successful
+ * Return: 0 on successful, -1 if failed.
  */
-int create_new_env(char *name, char *value)
+int createNew_env(char *name, char *value)
 {
-	char **new_environ;
-	char **new_env_ptr, **env_ptr;
-	size_t new_variable_len = _strlen(name) + _strlen(value) + 2;
-	/* +2 is added for '=' and '\0'*/
-	char *new_variable = malloc(new_variable_len);
+	char **env_new_ptr;
+        char **env_ptr;
+	char **environ_new;
+	size_t new_var_length = _strlen(name) + _strlen(value) + 2;
+	char *new_var = malloc(new_var_length);
 
 	if (name == NULL || value == NULL)
 	{
-		perror("No variable name or value found");
+		perror("variable name or value not found");
 		return (-1);
 	}
-	if (new_variable == NULL)
+	if (new_var == NULL)
 	{
 		perror("Failed to allocate memory");
 		return (-ENOMEM);
 	}
-	new_variable = _strcat(new_variable, name, value, '=');
+	new_var = _strcat(new_var, name, value, '=');
 
-	/*find the number of variable in environ*/
 	env_ptr = environ;
 	while (*env_ptr)
 		env_ptr++;
 
-	new_environ = malloc((env_ptr - environ + 2) * sizeof(char *));
-	if (new_environ == NULL)
+	environ_new = malloc((env_ptr - environ + 2) * sizeof(char *));
+	if (environ_new == NULL)
 	{
-		perror("Failed to allocate memory"), free(new_variable);
+		perror("Failed to allocate memory"), free(new_var);
 		return (-ENOMEM);
 	}
-	/*copy existing environ into new environ*/
-	new_env_ptr = new_environ;
+	
+	env_new_ptr = environ_new;
 	env_ptr = environ;
 	while (*env_ptr)
-		*new_env_ptr++ = *env_ptr++;
+		*env_new_ptr++ = *env_ptr++;
 
-	*new_env_ptr++ = new_variable;
-	*new_env_ptr = NULL;
-	/* replace old envrionment with new environment*/
-	environ = new_environ;
+	*env_new_ptr++ = new_var;
+	*env_new_ptr = NULL;
+	environ = environ_new;
 	return (0);
 }
 
 /**
- * _setenv -  changes or adds an environment variable
- * @name: name of variable
- * @value: value of variable
- * @overwrite: integer to modify environment
+ * set_env - Function that adds or changes an environment variable
+ * @value: The value of variable
+ * @name: The given name of variable
+ * @
+ * @overwrite: integer dedicated to modifying the environment
  *
- * Return: 0 if successful
+ * Return: 0 on success. -1 if failed
  */
-int _setenv(char *name, char *value, int overwrite)
+int set_env(char *name, char *value, int overwrite)
 {
-	size_t name_len = _strlen(name);
-	/* +2 is added for '=' and '\0'*/
-	size_t new_variable_len = name_len + _strlen(value) + 2;
+	size_t name_length = _strlen(name);
+	size_t new_var_len = name_length + _strlen(value) + 2;
 	char **env_ptr = environ;
 
 	if (!overwrite)
-		return (0); /*variable exist and overwrite is not allowed*/
-
+		return (0); 
 	while (*env_ptr)
 	{
-		/* check if existing variable match name*/
-		if (_strncmp(*env_ptr, name, name_len) == 0 &&
-		    ((*env_ptr)[name_len] == '='))
+		if (_strncmp(*env_ptr, name, name_length) == 0 &&
+		    ((*env_ptr)[name_length] == '='))
 		{
-			char *new_variable = malloc(new_variable_len);
+			char *new_var = malloc(new_var_len);
 
-			if (new_variable == NULL)
+			if (new_var == NULL)
 			{
 				perror("Failed to allocate memory");
 				return (-1);
 			}
 
-			/**
-			 * TODO:
-			 * If variable exists, unset variable
-			 * before setting a new one
-			 */
-			new_variable = _strcat(new_variable, name, value, '=');
-			/*replace old variable with new variable*/
-			*env_ptr = new_variable;
+			new_var = _strcat(new_var, name, value, '=');
 
-			free(new_variable);
+			*env_ptr = new_var;
+
+			free(new_var);
 			return (0);
 		}
 		env_ptr++;
 	}
-	/*if the variable does not exist*/
-	return (create_new_env(name, value));
+
+	return (createNew_env(name, value));
 }
 
 /**

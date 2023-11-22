@@ -46,11 +46,9 @@ int execute_command(char **argv);
 int (*handle_builtin_func(char *s))(char **argv);
 typedef int (*get_builtin)(char **argv);
 int modify_env(char **argv);
-int exit_simple_shell(char **argv);
+int exit_shell(char **argv);
 int print_env(char **argv UNUSED);
-int changeworking_dir(char **argv);
-/*--------------------------------------------*/
-
+int change_dir(char **argv);
 void trim(char **str);
 int get_argv(char ***argv);
 void free_argv(char **argv);
@@ -61,8 +59,8 @@ char **create_env_table(char **envp);
 ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
 ssize_t readline(char **lineptr, size_t *n, int fd);
 int resize_getline_buf(char **lineptr, size_t *n, size_t new_size);
-int create_new_env(char *name, char *value);
-int _setenv(char *name, char *value, int overwrite);
+int createNew_env(char *name, char *value);
+int set_env(char *name, char *value, int overwrite);
 int _unsetenv(char *name);
 
 size_t _strlen(const char *str);
