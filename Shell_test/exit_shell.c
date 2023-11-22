@@ -57,7 +57,7 @@ int modify_env(char **argv)
 	{
 		char *name = argv[1];
 
-		rslt = _unsetenv(name);
+		rslt = unsetenv(name);
 
 		return (rslt);
 	}

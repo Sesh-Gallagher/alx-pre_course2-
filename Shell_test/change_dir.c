@@ -10,7 +10,7 @@
 int change_dir(char **argv)
 {
 	char *pth;
-	char new_dir[PATH_MAX], old_dir[PATH_MAX];
+	char _newdir[PATH_MAX], _olddir[PATH_MAX];
 
 	if (argv[1] == NULL || _strcmp(argv[1], "~") == 0)
 		pth = _getenv("Home");
@@ -26,7 +26,7 @@ int change_dir(char **argv)
 			: 0;
 
 	/** Function to get old pathwd **/
-	if (getcwd(old_dir, sizeof(old_dir)) == NULL)
+	if (getcwd(_olddir, sizeof(_olddir)) == NULL)
 		return (-1);
 
 	/** Function to change directory**/
@@ -34,15 +34,15 @@ int change_dir(char **argv)
 		return (-1);
 
 	/** Function update old pathwd **/
-	if (set_env("oldpwd", old_dir, 1) != 0)
+	if (set_env("oldpwd", _olddir, 1) != 0)
 		return (-1);
 
 	/** Function to get new pathwd **/
-	if (getcwd(new_dir, sizeof(new_dir)) == NULL)
+	if (getcwd(_newdir, sizeof(_newdir)) == NULL)
 		return (-1);
 
 	/** Function to update new pathwd **/
-	if (set_env("pwd", new_dir, 1) != 0)
+	if (set_env("pwd", _newdir, 1) != 0)
 		return (-1);
 
 	return (0);

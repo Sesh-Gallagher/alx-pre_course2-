@@ -10,7 +10,7 @@
 int createNew_env(char *name, char *value)
 {
 	char **env_new_ptr;
-        char **env_ptr;
+	char **env_ptr;
 	char **environ_new;
 	size_t new_var_length = _strlen(name) + _strlen(value) + 2;
 	char *new_var = malloc(new_var_length);
@@ -37,7 +37,7 @@ int createNew_env(char *name, char *value)
 		perror("Failed to allocate memory"), free(new_var);
 		return (-ENOMEM);
 	}
-	
+
 	env_new_ptr = environ_new;
 	env_ptr = environ;
 	while (*env_ptr)
@@ -53,7 +53,6 @@ int createNew_env(char *name, char *value)
  * set_env - Function that adds or changes an environment variable
  * @value: The value of variable
  * @name: The given name of variable
- * @
  * @overwrite: integer dedicated to modifying the environment
  *
  * Return: 0 on success. -1 if failed
@@ -65,7 +64,7 @@ int set_env(char *name, char *value, int overwrite)
 	char **env_ptr = environ;
 
 	if (!overwrite)
-		return (0); 
+		return (0);
 	while (*env_ptr)
 	{
 		if (_strncmp(*env_ptr, name, name_length) == 0 &&
@@ -93,16 +92,16 @@ int set_env(char *name, char *value, int overwrite)
 }
 
 /**
- * _unsetenv - removes an environment variable
- * @name: name of variable
- *
- * Return: 0 if successful
+ * unset_env - Function that removes an environment variable
+ * @name: name of variable in the enviroment
+ * Return: 0 if successful, -1 on failure.
  */
-int _unsetenv(char *name)
+
+int unset_env(char *name)
 {
-	char **env_ptr;
-	char **next_env_ptr;
 	size_t name_len = _strlen(name);
+	char **env_ptr;
+	char **nxt_env_ptr;
 
 	if (name == NULL)
 	{
@@ -112,15 +111,13 @@ int _unsetenv(char *name)
 	env_ptr = environ;
 	while (*env_ptr)
 	{
-		/* find environment variable to remove*/
 		if (_strncmp(*env_ptr, name, name_len) == 0 && ((*env_ptr)[name_len] == '='))
 		{
 			free(*env_ptr);
 
-			/*move the remaining variables up the array*/
-			next_env_ptr = env_ptr + 1;
-			while (*next_env_ptr)
-				*env_ptr++ = *next_env_ptr++;
+			nxt_env_ptr = env_ptr + 1;
+			while (*nxt_env_ptr)
+				*env_ptr++ = *nxt_env_ptr++;
 
 			*env_ptr = NULL;
 
@@ -129,7 +126,7 @@ int _unsetenv(char *name)
 		env_ptr++;
 	}
 
-	return (-1); /*variable not found*/
+	return (-1);
 }
 
 /**
