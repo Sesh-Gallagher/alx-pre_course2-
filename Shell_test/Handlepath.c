@@ -58,7 +58,7 @@ int execute_command(char **argv)
  */
 char *handle_path(char *cmd)
 {
-	char *path = _getenv("PATH");
+	char *path = getenv("PATH");
 	char *path_copy;
 	char *token;
 	char *full_path;

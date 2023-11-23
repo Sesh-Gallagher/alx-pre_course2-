@@ -1,19 +1,69 @@
 #include "Shell.h"
 
+/** Names of functions to be used **/
+
+char **create_envtable(char **envp);
+int createNew_env(char *name, char *value);
+int set_env(char *name, char *value, int overwrite);
+int unset_env(char *name);
+char *get_env(const char *name);
+
+/**
+ * create_envtable - Function that creates an environment variable
+ * @envp: an array of the string to be provided by the enviroment
+ *
+ * Return: returns an array of the string 
+ * containing theenvironment variable.
+ */
+
+char **create_envtable(char **envp)
+{
+	char **enviro;
+	int cnt = 0, a;
+
+	while (envp[cnt] != NULL)
+		cnt++;
+
+	enviro = (char **)malloc((cnt + 1) * sizeof(char *));
+	if (enviro == NULL)
+	{
+		perror("Memory allocation failed");
+		exit(1);
+	}
+
+	memset(enviro, 0, (cnt + 1));
+
+	for (a = 0; a < cnt; a++)
+	{
+		enviro[a] = _strdup(envp[a]);
+		if (enviro[a] == NULL)
+		{
+			perror("Memory allocation failed");
+			exit(1);
+		}
+	}
+
+	enviro[cnt] = NULL;
+
+	return (enviro);
+}
+
 /**
  * createNew_env - Function that adds a new environment variable
- * @value: The value of variable
- * @name: Name of the variable to be used
+ * @value: The value of the variable in the enviro
+ * @name: Name of the variable to be used in the envito
  *
  * Return: 0 on successful, -1 if failed.
  */
+
 int createNew_env(char *name, char *value)
 {
-	char **env_new_ptr;
-	char **env_ptr;
+	char **enviro_ptr;
 	char **environ_new;
-	size_t new_var_length = _strlen(name) + _strlen(value) + 2;
-	char *new_var = malloc(new_var_length);
+	char **env_new_ptr;
+	size_t new_var_len = _strlen(name) + _strlen(value) + 2;
+	char *new_var = malloc(new_var_len);
+
 
 	if (name == NULL || value == NULL)
 	{
@@ -27,21 +77,23 @@ int createNew_env(char *name, char *value)
 	}
 	new_var = _strcat(new_var, name, value, '=');
 
-	env_ptr = environ;
-	while (*env_ptr)
-		env_ptr++;
+	enviro_ptr = environ;
+	while (*enviro_ptr)
+		enviro_ptr++;
 
-	environ_new = malloc((env_ptr - environ + 2) * sizeof(char *));
+	environ_new = malloc((enviro_ptr - environ + 2) * sizeof(char *));
 	if (environ_new == NULL)
 	{
-		perror("Failed to allocate memory"), free(new_var);
+		perror("Failed to allocate memory"),
+			free(new_var);
+
 		return (-ENOMEM);
 	}
 
 	env_new_ptr = environ_new;
-	env_ptr = environ;
-	while (*env_ptr)
-		*env_new_ptr++ = *env_ptr++;
+	enviro_ptr = environ;
+	while (*enviro_ptr)
+		*env_new_ptr++ = *enviro_ptr++;
 
 	*env_new_ptr++ = new_var;
 	*env_new_ptr = NULL;
@@ -57,18 +109,19 @@ int createNew_env(char *name, char *value)
  *
  * Return: 0 on success. -1 if failed
  */
+
 int set_env(char *name, char *value, int overwrite)
 {
 	size_t name_length = _strlen(name);
 	size_t new_var_len = name_length + _strlen(value) + 2;
-	char **env_ptr = environ;
+	char **enviro_ptr = environ;
 
 	if (!overwrite)
 		return (0);
-	while (*env_ptr)
+	while (*enviro_ptr)
 	{
-		if (_strncmp(*env_ptr, name, name_length) == 0 &&
-		    ((*env_ptr)[name_length] == '='))
+		if (_strncmp(*enviro_ptr, name, name_length) == 0 &&
+		    ((*enviro_ptr)[name_length] == '='))
 		{
 			char *new_var = malloc(new_var_len);
 
@@ -80,12 +133,12 @@ int set_env(char *name, char *value, int overwrite)
 
 			new_var = _strcat(new_var, name, value, '=');
 
-			*env_ptr = new_var;
+			*enviro_ptr = new_var;
 
 			free(new_var);
 			return (0);
 		}
-		env_ptr++;
+		enviro_ptr++;
 	}
 
 	return (createNew_env(name, value));
@@ -99,105 +152,62 @@ int set_env(char *name, char *value, int overwrite)
 
 int unset_env(char *name)
 {
-	size_t name_len = _strlen(name);
-	char **env_ptr;
-	char **nxt_env_ptr;
+	size_t nme_length = _strlen(name);
+	char **_envptr;
+	char **nxt_envptr;
 
 	if (name == NULL)
 	{
 		perror("Invalid argument");
 		return (-1);
 	}
-	env_ptr = environ;
-	while (*env_ptr)
+	_envptr = environ;
+	while (*_envptr)
 	{
-		if (_strncmp(*env_ptr, name, name_len) == 0 && ((*env_ptr)[name_len] == '='))
+		if (_strncmp(*_envptr, name, nme_length) == 0 && ((*_envptr)[nme_length] == '='))
 		{
-			free(*env_ptr);
+			free(*_envptr);
 
-			nxt_env_ptr = env_ptr + 1;
-			while (*nxt_env_ptr)
-				*env_ptr++ = *nxt_env_ptr++;
+			nxt_envptr = _envptr + 1;
+			while (*nxt_envptr)
+				*_envptr++ = *nxt_envptr++;
 
-			*env_ptr = NULL;
+			*_envptr = NULL;
 
 			return (0);
 		}
-		env_ptr++;
+		_envptr++;
 	}
 
 	return (-1);
 }
 
 /**
- * _getenv - gets an environment variable.
- * @name: variable name.
+ * get_env - function that gets an environment variable.
+ * @name: variable name in the enviroment
  *
- * Return: returns pointer to value in environment or NUll if not found.
+ * Return: return 0 if pointer to value in environment, NUll if not found.
  */
-char *_getenv(const char *name)
+
+char *get_env(const char *name)
 {
-	char **environ_copy;
-	char *current_var;
 	unsigned int length = _strlen(name);
+	char **enviro_cpy;
+	char *curr_variable;
 
-	environ_copy = environ;
-	while (*environ_copy != NULL)
+	enviro_cpy = environ;
+	while (*enviro_cpy != NULL)
 	{
-		current_var = *environ_copy;
+		curr_variable = *enviro_cpy;
 
-		/*checks if the current VAR matches name*/
-		if ((_strncmp(current_var, name, length) == 0) &&
-		    (current_var[length] == '='))
+		if ((_strncmp(curr_variable, name, length) == 0) &&
+		    (curr_variable[length] == '='))
 		{
-			return (current_var + length + 1);
-			/*+1 is added to skip the '=' char*/
+			return (curr_variable + length + 1);
 		}
 
-		environ_copy++;
+		enviro_cpy++;
 	}
 
 	return (NULL);
-
-}
-
-/**
- * create_env_table - creates environment variables
- * @envp: array of strings
- *
- * Return: returns an array of strings containing environment variables.
- */
-
-char **create_env_table(char **envp)
-{
-	/*Count the number of environment variables*/
-	int count = 0, i;
-	char **env;
-
-	while (envp[count] != NULL)
-		count++;
-
-	/* Allocate memory for the array of environment variables*/
-	env = (char **)malloc((count + 1) * sizeof(char *));
-	if (env == NULL)
-	{
-		perror("Memory allocation failed");
-		exit(1);
-	}
-	memset(env, 0, (count + 1));
-
-	/* Copy each environment variable to the new array*/
-	for (i = 0; i < count; i++)
-	{
-		env[i] = _strdup(envp[i]);
-		if (env[i] == NULL)
-		{
-			perror("Memory allocation failed");
-			exit(1);
-		}
-	}
-	/* Add a NULL terminator to the end of the array*/
-	env[count] = NULL;
-
-	return (env);
 }

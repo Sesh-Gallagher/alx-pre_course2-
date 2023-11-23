@@ -2,7 +2,7 @@
 
 /**
  * change_dir - #cd function that changes working directory
- * @argv: ...
+ * @argv: ...argument variable/vector
  *
  * Return: 0 on success, -1 if failure.
  */
@@ -13,9 +13,9 @@ int change_dir(char **argv)
 	char _newdir[PATH_MAX], _olddir[PATH_MAX];
 
 	if (argv[1] == NULL || _strcmp(argv[1], "~") == 0)
-		pth = _getenv("Home");
+		pth = get_env("Home");
 	else if (_strcmp(argv[1], "-") == 0)
-		pth = _getenv("oldpwd");
+		pth = get_env("oldpwd");
 	else
 		pth = argv[1];
 
@@ -25,23 +25,18 @@ int change_dir(char **argv)
 					"./hsh: 1: cd: can't cd to %s\n", pth)
 			: 0;
 
-	/** Function to get old pathwd **/
 	if (getcwd(_olddir, sizeof(_olddir)) == NULL)
 		return (-1);
 
-	/** Function to change directory**/
 	if (chdir(pth) != 0)
 		return (-1);
 
-	/** Function update old pathwd **/
 	if (set_env("oldpwd", _olddir, 1) != 0)
 		return (-1);
 
-	/** Function to get new pathwd **/
 	if (getcwd(_newdir, sizeof(_newdir)) == NULL)
 		return (-1);
 
-	/** Function to update new pathwd **/
 	if (set_env("pwd", _newdir, 1) != 0)
 		return (-1);
 

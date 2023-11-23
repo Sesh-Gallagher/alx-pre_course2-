@@ -53,8 +53,8 @@ void trim(char **str);
 int get_argv(char ***argv);
 void free_argv(char **argv);
 int resize_argv(char ***argv, size_t *max_argc);
-char *_getenv(const char *name);
-char **create_env_table(char **envp);
+char *get_env(const char *name);
+char **create_envtable(char **envp);
 
 ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
 ssize_t readline(char **lineptr, size_t *n, int fd);
